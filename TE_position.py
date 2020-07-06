@@ -1,12 +1,16 @@
+# python3 TE.py -ch CHR12 upper_guppy_pacbio_male.fasta.masked > Chr12.csv
+
 import sys
 import argparse
 # dependencies: biopython, numpy and matplotlib
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 from Bio import SeqIO
+
 # conda install -c conda-forge biopython
 # or
 # pip install biopython
+
 
 parser = argparse.ArgumentParser(description='Plot fraction of masked genome along the chromosome')
 parser.add_argument('fasta_input', type=argparse.FileType('r'), help='fasta file to plot', default=sys.stdin)
@@ -31,6 +35,7 @@ if args.figure_name == 'auto':
 sys.stderr.write('generating {}\n'.format(args.figure_name))
 
 repeat = []
+position = []
 # this will be a vector that will mark splits between chromosomes
 chromosome_breaks = []
 
@@ -61,14 +66,22 @@ for record in SeqIO.parse(args.fasta_input, "fasta"):
 		# if a chromosome was supposed to be plotted, there is not a point in iterating through others
 		break
 
+# change the x-axis scale to Mbp
+x_axis = range(0,len(repeat))
+for x in x_axis:
+	x = x*args.w/1000000
+	position.append(x)
+
+
 plt.figure(figsize=(20,10))
-plt.plot(repeat, label = "Masked Bases",linewidth=3)
+plt.plot(position,repeat, label = "Masked Bases",linewidth=3)
 if record.name == 'all':
 	plt.plot(chromosome_breaks, label = "chromosome breaks",linewidth=5)
 plt.xticks(fontsize=15)
 plt.yticks(fontsize=15)
+plt.ylim((0, 1))
 plt.ylabel('Fraction of Masked Bases',fontsize=20)
-plt.xlabel('Position of Genome',fontsize=20)
+plt.xlabel('Position of Genome (Mb)',fontsize=20)
 # this should be adjusted
 # plt.title("Repetitive sequence position in male guppy's sex chromosome")
 plt.legend()
