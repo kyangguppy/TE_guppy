@@ -1,0 +1,2 @@
+#source activate py36
+python /ceph/users/kyang/bin/repeatcraftp/repeatcraft.py -r /data/charlesworth/guppy/analyses/temporary/RepeatMasker/guppy_pacbio_male.unmasked.fasta.out.gff -u /data/charlesworth/guppy/analyses/temporary/RepeatMasker/guppy_pacbio_male.unmasked.fasta.out -c /ceph/users/kyang/bin/repeatcraftp/example/repeatcraft_strict.cfg -o /scratch/kyang/repeatcraft -m strict && rsync -r /scratch/kyang/repeatcraft /data/charlesworth/guppy/analyses/temporary && rm -r /scratch/kyang/repeatcraft
